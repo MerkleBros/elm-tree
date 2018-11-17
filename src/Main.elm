@@ -65,6 +65,7 @@ type Msg
     | GetRandomMessage
     | DisplayMessage Int
     | IncrementTileCount
+    | TileClick Int Tile
 
 
 messageOne : String
@@ -120,6 +121,33 @@ update msg model =
             ({ model | tileCount = tileCount + 1
             }, Cmd.none)
 
+        TileClick key tile -> 
+            let
+                markTileVisited : Tile -> Tile
+                markTileVisited t = 
+                    { t | visited = True }
+
+                --handleTileClick : Tile -> Tile
+                --handleTileClick tile = 
+                --    if tile.tileClass == Tile.Empty then
+
+                --    if tile.tileClass == Tile.Wood then
+
+                --    if tile.tileClass == Tile.Fire then
+
+                --    if tile.tileClass == Tile.Seed then
+
+                --    if tile.tileClass == Tile.Wind then
+
+                --    if tile.tileClass == Tile.Water then
+
+                --    if tile.tileClass == Tile.Eye then
+                
+            in
+                ({model | board = 
+                    Dict.update key (Maybe.map (markTileVisited)) model.board
+                }, Cmd.none)
+
 
 --randomMessage : Dict.Dict String String -> String
 --randomMessage dict = 
@@ -158,54 +186,35 @@ renderBoard b =
         ] 
         (Dict.toList b
             |> List.map (\t -> (tileToHtmlMsg <| (Tuple.first t)) (Tuple.second t) ))
-            --div [] [text <| String.fromInt (Tuple.first t)]))
 
 tileToHtmlMsg : Int -> Tile -> Html Msg
 tileToHtmlMsg key t = 
     div [ Html.Attributes.property "className" (Encode.string t.cssClass)
         , Html.Attributes.property "className" (Encode.string "grid-element")
+        , onClick (TileClick key t)
     ] [text <| String.fromInt key]
 
---renderTile : Tile -> Html Msg
---renderTile t = 
---   div [property "className" t.cssClass] 
---        (Dict.toList b
---        |> List.map (\t -> 
---            tileToHtmlMsg (Tuple.second t)))
+--markTileVisited : Tile -> Tile
+--markTileVisited tile = 
+--    { tile | visited = True }
 
-    --let
-    --    rows = 
-    --        b
-    --            |> 
-            
-    --in
-            
-    --if List.isEmpty b then
-    --    div [] [text "Board is empty"]
-    --else
-    --    let
-    --        rows = 
-    --            b
-    --                |> List.map (\r -> renderBoardRow r)
-                
-    --    in
-    --        div [] rows
+--handleTileClick : Tile -> Tile
+--handleTileClick tile = 
+--    if tile.tileClass == Tile.Empty then
 
---renderBoardRow : List Tile -> Html Msg
---renderBoardRow row = 
---    if List.isEmpty row then 
---        div [] [text "Row is empty"]
---    else 
---        let 
---            tiles = 
---                row 
---                    |> List.map (\t -> renderTile t)
---        in
---            div [] tiles
+--    if tile.tileClass == Tile.Wood then
 
---renderTile : Tile -> Html Msg
---renderTile tile =
---    div [] [text (String.fromInt tile.cssClass)]
+--    if tile.tileClass == Tile.Fire then
+
+--    if tile.tileClass == Tile.Seed then
+
+--    if tile.tileClass == Tile.Wind then
+
+--    if tile.tileClass == Tile.Water then
+
+--    if tile.tileClass == Tile.Eye then
+
+
 
 renderRestaurants : List Restaurant -> Html Msg
 renderRestaurants restaurants =

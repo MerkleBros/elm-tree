@@ -4,16 +4,17 @@ import Random
 
 type GameClass
     = Shovel
-    | Wind
     | GameTime
     | None
 
 type TileClass
     = Empty
-    | Tree
+    | Wood
     | Fire
     | Seed
-    | Earth
+    | Wind
+    | Water
+    | Eye
 
 gameClassCount : Int
 gameClassCount = 4
@@ -25,24 +26,26 @@ intToTileClass : Int -> TileClass
 intToTileClass i =
     case i of
         1 -> Empty
-        2 -> Tree
+        2 -> Wood
         3 -> Fire
         4 -> Seed
-        5 -> Earth
+        5 -> Wind
+        6 -> Water
+        7 -> Eye
         _ -> Empty
 
 intToGameClass : Int -> GameClass
 intToGameClass i =
     case i of
         1 -> Shovel
-        2 -> Wind
-        3 -> GameTime
+        2 -> GameTime
         _ -> None
 
 type alias Tile = 
     { cssClass: String
     , gameClass: GameClass
     , tileClass: TileClass
+    , visited: Bool
     }
 
 generateTile : String -> GameClass -> TileClass -> Tile
@@ -50,6 +53,7 @@ generateTile name gameClass tileClass =
     { cssClass = name
     , gameClass = gameClass
     , tileClass = tileClass
+    , visited = False
     }
 
 generateRandomTile : Random.Generator TileClass
