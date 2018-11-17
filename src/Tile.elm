@@ -40,16 +40,14 @@ intToGameClass i =
         _ -> None
 
 type alias Tile = 
-    { id: Int
-    , cssClass: String
+    { cssClass: String
     , gameClass: GameClass
     , tileClass: TileClass
     }
 
-generateTile : Int -> String -> GameClass -> TileClass -> Tile
-generateTile id name gameClass tileClass =
-    { id = id
-    , cssClass = name
+generateTile : String -> GameClass -> TileClass -> Tile
+generateTile name gameClass tileClass =
+    { cssClass = name
     , gameClass = gameClass
     , tileClass = tileClass
     }

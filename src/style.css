@@ -1,18 +1,40 @@
-h1 {
-  text-align: center;
+body {
+  background-color: #041e1f
 }
 
+h1 {
+  text-align: center;
+  color: white;
+}
 .grid {
   display: grid;
-  height: 50px;
-  width: 50px;
+  width: 36vw;
+  height: 36vw;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   background-color: gray;
-
+  margin-left: auto;
+  margin-right: auto;
+  border: 25px solid #3c1f14;
 }
 .grid-element {
-  background-color: red;
+  background-color: #ffb263;
+  height: 3.5vw;
+  width: 3.5vw;
+  border: 1px solid #3c1f14;
+}
+
+.tree {
+  background-color: #5d2701;
+}
+.water {
+  background-color: #475496;
+}
+.fire {
+  background-color: #ff6537;
+}
+.earth {
+  background-color: #ffb263;
 }
 
 table {

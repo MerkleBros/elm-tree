@@ -9,6 +9,7 @@ import Html.Attributes exposing (href)
 import Html.Events exposing (onClick)
 import Http
 import Json.Decode as Decode exposing (Value)
+import Json.Encode as Encode
 import Random
 import Result
 
@@ -20,21 +21,25 @@ import Tile exposing (..)
 type alias Board
     = Dict Int Tile
 
+type alias BoardList
+    = List (List Tile)
+
 initBoard : Board
 initBoard = 
-    Tile.generateTile 0 "none" Tile.None Tile.Empty
+    Tile.generateTile "none" Tile.None Tile.Empty
         |> List.repeat 100 
         |> List.map2 Tuple.pair (List.range 1 100)
         |> Dict.fromList 
 
-board : Board
-board = initBoard
+tileCount : Int
+tileCount = 100
 
 type alias Model =
     { restaurants : List Restaurant 
     , displayMessage : String
     , board : Board
-    --, tileCount : Int
+    , tileCount : Int
+    , treeTitle: String
     }
 
 initModel : Model
@@ -42,7 +47,8 @@ initModel =
     { restaurants = []
     , displayMessage = "This is the first message" 
     , board = initBoard
-    --, tileCount = 0
+    , tileCount = tileCount
+    , treeTitle = "Tiny elm tree"
     }
 
 generator : Random.Generator Int
@@ -58,8 +64,7 @@ type Msg
     | UpdateRestaurants (Result Http.Error (List Restaurant))
     | GetRandomMessage
     | DisplayMessage Int
-    | InitializeBoard Board
-    --| IncrementTileCount
+    | IncrementTileCount
 
 
 messageOne : String
@@ -111,13 +116,9 @@ update msg model =
                 --        Nothing -> "No message found"
             }, Cmd.none)
 
-        InitializeBoard i -> 
-            ({ model | board = i
+        IncrementTileCount -> 
+            ({ model | tileCount = tileCount + 1
             }, Cmd.none)
-
-        --IncrementTileCount -> 
-        --    ({ model | tileCount = tileCount + 1
-        --    }, Cmd.none)
 
 
 --randomMessage : Dict.Dict String String -> String
@@ -143,25 +144,52 @@ view model =
 
 renderBody : Model -> List (Html Msg)
 renderBody model =
-    [ h1 [] [ text "Random NYC Restaurants" ]
-    , button [ onClick GetRestaurants ] [ text "Click ME!" ]
-    , button [ onClick GetRandomMessage ] [ text model.displayMessage]
-    , renderRestaurants model.restaurants
-    , div [] [ text "hi" ]
+    [ h1 [] [ text model.treeTitle]
+    --, button [ onClick GetRestaurants ] [ text "Click ME!" ]
+    --, button [ onClick GetRandomMessage ] [ text model.displayMessage]
+    --, renderRestaurants model.restaurants
+    , renderBoard model.board
     ]
 
---renderBoard : Board -> Html Msg
---renderBoard b = 
---    if List.isEmpty b then
---        div [] [text "Board is empty"]
---    else
---        let
---            rows = 
---                b
---                    |> List.map (\r -> renderBoardRow r)
+renderBoard : Board -> Html Msg
+renderBoard b = 
+    div [ Html.Attributes.property 
+                "className" (Encode.string "grid")
+        ] 
+        (Dict.toList b
+            |> List.map (\t -> (tileToHtmlMsg <| (Tuple.first t)) (Tuple.second t) ))
+            --div [] [text <| String.fromInt (Tuple.first t)]))
+
+tileToHtmlMsg : Int -> Tile -> Html Msg
+tileToHtmlMsg key t = 
+    div [ Html.Attributes.property "className" (Encode.string t.cssClass)
+        , Html.Attributes.property "className" (Encode.string "grid-element")
+    ] [text <| String.fromInt key]
+
+--renderTile : Tile -> Html Msg
+--renderTile t = 
+--   div [property "className" t.cssClass] 
+--        (Dict.toList b
+--        |> List.map (\t -> 
+--            tileToHtmlMsg (Tuple.second t)))
+
+    --let
+    --    rows = 
+    --        b
+    --            |> 
+            
+    --in
+            
+    --if List.isEmpty b then
+    --    div [] [text "Board is empty"]
+    --else
+    --    let
+    --        rows = 
+    --            b
+    --                |> List.map (\r -> renderBoardRow r)
                 
---        in
---            div [] rows
+    --    in
+    --        div [] rows
 
 --renderBoardRow : List Tile -> Html Msg
 --renderBoardRow row = 
@@ -177,7 +205,7 @@ renderBody model =
 
 --renderTile : Tile -> Html Msg
 --renderTile tile =
---    div [] [text (String.fromInt tile.id)]
+--    div [] [text (String.fromInt tile.cssClass)]
 
 renderRestaurants : List Restaurant -> Html Msg
 renderRestaurants restaurants =
