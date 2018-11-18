@@ -36,6 +36,9 @@ h1 {
 .earth {
   background-color: #ffb263;
 }
+.emptyTile {
+  background-color: black;
+}
 
 table {
   width: 100%;

@@ -24,7 +24,7 @@ type alias Board
 
 initBoard : Board
 initBoard = 
-    Tile.generateTile "none" Tile.None Tile.Fire
+    Tile.generateTile "none" Tile.None Tile.Empty
         |> List.repeat 100 
         |> List.map2 Tuple.pair (List.range 1 100)
         |> Dict.fromList 
@@ -141,7 +141,9 @@ update msg model =
                 let
                     markTileVisited : Tile -> Tile
                     markTileVisited t = 
-                        { t | visited = True }
+                        { t | visited = True
+                            , cssClass = "emptyTile"
+                        }
                     
                 in                
                     case tile.tileClass of 
