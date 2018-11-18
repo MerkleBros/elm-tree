@@ -10,6 +10,7 @@ import Html.Events exposing (onClick)
 import Http
 import Json.Decode as Decode exposing (Value)
 import Json.Encode as Encode
+import Task exposing (Task)
 import Random
 import Result
 
@@ -26,7 +27,7 @@ type alias BoardList
 
 initBoard : Board
 initBoard = 
-    Tile.generateTile "none" Tile.None Tile.Empty
+    Tile.generateTile "none" Tile.None Tile.Fire
         |> List.repeat 100 
         |> List.map2 Tuple.pair (List.range 1 100)
         |> Dict.fromList 
@@ -38,8 +39,15 @@ type alias Model =
     { restaurants : List Restaurant 
     , displayMessage : String
     , board : Board
+    , level : Int
+    , gameOver: Bool
     , tileCount : Int
     , treeTitle: String
+    , woodCount: Int
+    , seedCount: Int
+    , windCount: Int
+    , waterCount: Int
+    , eyeCount: Int
     }
 
 initModel : Model
@@ -47,8 +55,15 @@ initModel =
     { restaurants = []
     , displayMessage = "This is the first message" 
     , board = initBoard
+    , level = 1
+    , gameOver = False
     , tileCount = tileCount
     , treeTitle = "Tiny elm tree"
+    , woodCount = 0
+    , seedCount = 0
+    , windCount = 5
+    , waterCount = 1
+    , eyeCount = 10
     }
 
 generator : Random.Generator Int
@@ -66,7 +81,7 @@ type Msg
     | DisplayMessage Int
     | IncrementTileCount
     | TileClick Int Tile
-
+    | EndGame
 
 messageOne : String
 messageOne = "This is a string."
@@ -122,32 +137,45 @@ update msg model =
             }, Cmd.none)
 
         TileClick key tile -> 
-            let
-                markTileVisited : Tile -> Tile
-                markTileVisited t = 
-                    { t | visited = True }
+            if ( tile.visited == True || model.gameOver == True) then
+                (model, Cmd.none)
 
-                --handleTileClick : Tile -> Tile
-                --handleTileClick tile = 
-                --    if tile.tileClass == Tile.Empty then
+            else
+                let
+                    markTileVisited : Tile -> Tile
+                    markTileVisited t = 
+                        { t | visited = True }
+                    
+                in                
+                    case tile.tileClass of 
 
-                --    if tile.tileClass == Tile.Wood then
+                        Tile.Wood  -> ({ model | woodCount = model.woodCount + 1 
+                            , board = Dict.update key (Maybe.map (markTileVisited)) model.board}, Cmd.none)
 
-                --    if tile.tileClass == Tile.Fire then
+                        Tile.Seed  -> ({ model | seedCount = model.seedCount + 1 
+                            , board = Dict.update key (Maybe.map (markTileVisited)) model.board}, Cmd.none)
 
-                --    if tile.tileClass == Tile.Seed then
+                        Tile.Wind  -> ({ model | windCount = model.windCount + 1 
+                            , board = Dict.update key (Maybe.map (markTileVisited)) model.board}, Cmd.none)
 
-                --    if tile.tileClass == Tile.Wind then
+                        Tile.Water -> ({ model | waterCount = model.waterCount + 1 
+                            , board = Dict.update key (Maybe.map (markTileVisited)) model.board}, Cmd.none)
 
-                --    if tile.tileClass == Tile.Water then
+                        Tile.Eye   -> ({ model | eyeCount = model.eyeCount + 1 
+                            , board = Dict.update key (Maybe.map (markTileVisited)) model.board}, Cmd.none)
 
-                --    if tile.tileClass == Tile.Eye then
-                
-            in
-                ({model | board = 
-                    Dict.update key (Maybe.map (markTileVisited)) model.board
-                }, Cmd.none)
+                        Tile.Empty -> ({ model | board = Dict.update key (Maybe.map (markTileVisited)) model.board}, Cmd.none)
 
+                        Tile.Fire  -> 
+                            if model.waterCount > 0 then
+                                ({ model | waterCount = model.waterCount - 1 }, Cmd.none)
+                            else
+                                update EndGame <|
+                                    { model | gameOver = True
+                                    , board = Dict.update key (Maybe.map (markTileVisited)) model.board}
+
+        EndGame -> 
+            (model, Cmd.none)
 
 --randomMessage : Dict.Dict String String -> String
 --randomMessage dict = 
@@ -193,28 +221,6 @@ tileToHtmlMsg key t =
         , Html.Attributes.property "className" (Encode.string "grid-element")
         , onClick (TileClick key t)
     ] [text <| String.fromInt key]
-
---markTileVisited : Tile -> Tile
---markTileVisited tile = 
---    { tile | visited = True }
-
---handleTileClick : Tile -> Tile
---handleTileClick tile = 
---    if tile.tileClass == Tile.Empty then
-
---    if tile.tileClass == Tile.Wood then
-
---    if tile.tileClass == Tile.Fire then
-
---    if tile.tileClass == Tile.Seed then
-
---    if tile.tileClass == Tile.Wind then
-
---    if tile.tileClass == Tile.Water then
-
---    if tile.tileClass == Tile.Eye then
-
-
 
 renderRestaurants : List Restaurant -> Html Msg
 renderRestaurants restaurants =
