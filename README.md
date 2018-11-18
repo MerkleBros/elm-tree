@@ -13,13 +13,14 @@ Each level starts with all tiles covered.
 
 The player clicks on tiles to uncover them.
 
-The player can discover Empty tiles, Seed tiles, Wood tiles, Wind tiles, Vision tiles, Water tiles, and Fire tiles
-1. Seeds - Players need a certain number of seeds to advance to the next level
-2. Wood - Players use wood to grow their elm tree and get more points
-3. Wind - Players can use wind to put out fires in a given tile area
-4. Vision - Players can use vision to get a sneak peek at tiles
-5. Water - Players sacrifice a water when they uncover a Fire tile.
-6. Fire - The player loses if they uncover a Fire tile without any Water tiles to put the fire out.
+The player can discover 7 types of tiles
+1. 'Seeds'  - Players need a certain number of seeds to advance to the next level
+2. 'Wood'   - Players use wood to grow their elm tree and get more points
+3. 'Wind'   - Players can use wind to put out fires in a given tile area
+4. 'Vision' - Players can use vision to get a sneak peek at tiles
+5. 'Water'  - Players sacrifice a water when they uncover a Fire tile.
+6. 'Fire'   - The player loses if they uncover a Fire tile without any Water tiles to put the fire out.
+7. 'Empty'  - Nothing happens :)
 
 The player may advance to the next level when they have collected enough seeds.
 
