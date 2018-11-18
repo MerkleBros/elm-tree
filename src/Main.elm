@@ -142,7 +142,7 @@ update msg model =
                     markTileVisited : Tile -> Tile
                     markTileVisited t = 
                         { t | visited = True
-                            , cssClass = "emptyTile"
+                            , cssCardIsFlipped = "isFlipped"
                         }
                     
                 in                
@@ -219,7 +219,17 @@ tileToHtmlMsg key t =
     div [ Html.Attributes.property "className" (Encode.string t.cssClass)
         , Html.Attributes.property "className" (Encode.string "grid-element")
         , onClick (TileClick key t)
-    ] [text <| String.fromInt key]
+    ] [ div [ Html.Attributes.property "className" (Encode.string "card")
+            , Html.Attributes.property "className" (Encode.string t.cssCardIsFlipped)
+            ] 
+            [ div [  Html.Attributes.property "className" (Encode.string "card__face")
+                    ,Html.Attributes.property "className" (Encode.string "card__face--front")
+            ] [text <| String.fromInt key]
+            , div [  Html.Attributes.property "className" (Encode.string "card__face")
+                    ,Html.Attributes.property "className" (Encode.string "card__face--back")
+            ] [text "Back"]
+            ]
+    ]
 
 renderRestaurants : List Restaurant -> Html Msg
 renderRestaurants restaurants =

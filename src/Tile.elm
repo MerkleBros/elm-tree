@@ -43,6 +43,7 @@ intToGameClass i =
 
 type alias Tile = 
     { cssClass: String
+    , cssCardIsFlipped: String
     , gameClass: GameClass
     , tileClass: TileClass
     , visited: Bool
@@ -51,6 +52,7 @@ type alias Tile =
 generateTile : String -> GameClass -> TileClass -> Tile
 generateTile name gameClass tileClass =
     { cssClass = name
+    , cssCardIsFlipped = "isNotFlipped"
     , gameClass = gameClass
     , tileClass = tileClass
     , visited = False
