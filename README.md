@@ -1,10 +1,10 @@
 ### Grow! An Elm Minesweeping Game
 ![license](https://img.shields.io/github/license/mashape/apistatus.svg)
 
-###About
+### About
 A Minesweeper style game where the player uncovers tiles in search of wood and seeds. Collect seeds to advance to the next level, or continue revealing tiles to collect more wood to grow your elm sapling. But watch out! If you uncover a fire tile it will burn your little tree to the ground!
 
-###Concepts
+### Concepts
 Each level starts with all tiles covered. 
 The player clicks on tiles to uncover them.
 
