@@ -22,9 +22,6 @@ import Tile exposing (..)
 type alias Board
     = Dict Int Tile
 
-type alias BoardList
-    = List (List Tile)
-
 initBoard : Board
 initBoard = 
     Tile.generateTile "none" Tile.None Tile.Fire
