@@ -12,13 +12,13 @@ h1 {
   height: 36vw;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-  background-color: gray;
+  background-color: #ffb263;
   margin-left: auto;
   margin-right: auto;
   border: 25px solid #3c1f14;
 }
 .grid-element {
-  /*background-color: #ffb263;*/
+  background-color: #ffb263;
   background-color: transparent;
   height: 3.5vw;
   width: 3.5vw;
@@ -43,7 +43,7 @@ h1 {
   backface-visibility: hidden;
 }
 .card__face--front {
-  background-color: red;
+  background-color: #ffb263;
 }
 
 .card__face--back {
